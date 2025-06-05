@@ -67,7 +67,7 @@ class RedisRepository implements Repository
         if ($lastCleanup && ($time - $lastCleanup < 30)) {
             return false; 
         }
-
+        $this->db->set($cleanupKey, $time);
         $fields = [];
         $it = new HashKey($this->db, $this->redis_key);
         foreach ($it as $sessionId => $value) {
@@ -79,8 +79,6 @@ class RedisRepository implements Repository
         if (!empty($fields)) {
             $this->db->hdel($this->redis_key, $fields);
         }
-
-        $this->db->set($cleanupKey, $time);
         return true;
     }
 
