@@ -59,23 +59,31 @@ class RedisRepository implements Repository
      * @param $time
      * @return int
      */
-    public function deleteOfflineVisitors($time)
+    public function deleteOfflineVisitors($time,$ttl)
     {
+        $cleanupKey = $this->redis_key . '_last_cleanup_time';
+
+        $lastCleanup = $this->db->get($cleanupKey);
+        if ($lastCleanup && ($time - $lastCleanup < $ttl)) {
+            return false; 
+        }
+
         $fields = [];
         $it = new HashKey($this->db, $this->redis_key);
-        foreach($it as $sessionId => $value){
-            if ($value < $time){
+        foreach ($it as $sessionId => $value) {
+            if ($value < $time) {
                 $fields[] = $sessionId;
             }
         }
 
-        if (!empty($fields))
-        {
+        if (!empty($fields)) {
             $this->db->hdel($this->redis_key, $fields);
         }
 
+        $this->db->set($cleanupKey, $time);
         return true;
     }
+
 
     /**
      * @return array

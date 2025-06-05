@@ -32,9 +32,10 @@ interface Repository
 
     /**
      * @param $time
+     * @param null $ttl
      * @return mixed
      */
-    public function deleteOfflineVisitors($time);
+    public function deleteOfflineVisitors($time,$ttl);
 
     /**
      * @return mixed

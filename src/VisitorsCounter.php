@@ -38,7 +38,7 @@ class VisitorsCounter
         $count = $repository->getAllVisitors();
 
         //Now, check if the session was stored for more than n-minutes and delete it if it is.
-        $repository->deleteOfflineVisitors($timeLimit);
+        $repository->deleteOfflineVisitors($timeLimit,$second);
 
         // close connect to DB
         $repository->close();
