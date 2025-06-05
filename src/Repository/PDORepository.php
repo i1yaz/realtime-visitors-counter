@@ -70,7 +70,7 @@ class PDORepository implements Repository
      * @param $time
      * @return mixed
      */
-    public function deleteOfflineVisitors($time,$ttl)
+    public function deleteOfflineVisitors($time)
     {
         $stmt = $this->pdo->prepare('DELETE FROM '. self::TABLE_NAME .' WHERE time < :time');
         $stmt->bindParam(":time", $time);

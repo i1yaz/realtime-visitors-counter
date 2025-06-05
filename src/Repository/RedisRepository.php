@@ -59,12 +59,12 @@ class RedisRepository implements Repository
      * @param $time
      * @return int
      */
-    public function deleteOfflineVisitors($time,$ttl)
+    public function deleteOfflineVisitors($time)
     {
         $cleanupKey = $this->redis_key . '_last_cleanup_time';
 
         $lastCleanup = $this->db->get($cleanupKey);
-        if ($lastCleanup && ($time - $lastCleanup < $ttl)) {
+        if ($lastCleanup && ($time - $lastCleanup < 30)) {
             return false; 
         }
 
